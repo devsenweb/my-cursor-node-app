@@ -10,7 +10,7 @@ describe('API Endpoints', () => {
       .expect(200);
 
     expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('Hello from your microservice!');
+    expect(response.body.message).toBe('Hello, World!');
   });
 
   test('GET /api/hello should have correct response structure', async () => {
@@ -20,7 +20,7 @@ describe('API Endpoints', () => {
       .expect(200);
 
     expect(response.body).toEqual({
-      message: 'Hello from your microservice!'
+      message: 'Hello, World!'
     });
   });
 
