@@ -58,14 +58,14 @@ jobs:
       uses: docker/setup-buildx-action@v2
     
     - name: Build Docker image
-      run: docker build -t my-cursor-node-app:test .
+      run: docker build -t node-tdd-api-demo:test .
     
     - name: List Docker images
       run: docker images
     
     - name: Run Docker container
       run: |
-        docker run -d -p 3000:3000 --name test-app my-cursor-node-app:test
+        docker run -d -p 3000:3000 --name test-app node-tdd-api-demo:test
         echo "Container started. Waiting for it to be ready..."
         sleep 10
     
@@ -83,6 +83,10 @@ jobs:
         curl -s http://localhost:3000/api/hello | jq .
         echo "Testing /api/test endpoint..."
         curl -s http://localhost:3000/api/test | jq .
+        echo "Testing /api/sum endpoint..."
+        curl -s -X POST http://localhost:3000/api/sum \
+          -H "Content-Type: application/json" \
+          -d '{"numbers": [1, 2, 3, 4, 5]}' | jq .
     
     - name: Cleanup
       if: always()

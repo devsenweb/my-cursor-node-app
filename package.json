@@ -1,5 +1,5 @@
 {
-  "name": "my-cursor-node-app",
+  "name": "node-tdd-api-demo",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
