@@ -38,12 +38,34 @@ jobs:
     - name: Build Docker image
       run: docker build -t my-cursor-node-app:test .
     
+    - name: List Docker images
+      run: docker images
+    
     - name: Run Docker container
       run: |
         docker run -d -p 3000:3000 --name test-app my-cursor-node-app:test
+        echo "Container started. Waiting for it to be ready..."
         sleep 10
-        curl http://localhost:3000/api/hello
+    
+    - name: Verify container is running
+      run: |
+        docker ps
+        echo "Testing container health..."
+        curl -v http://localhost:3000/api/hello
+        echo "Testing container logs..."
+        docker logs test-app
+    
+    - name: Test API endpoints
+      run: |
+        echo "Testing /api/hello endpoint..."
+        curl -s http://localhost:3000/api/hello | jq .
+        echo "Testing /api/test endpoint..."
+        curl -s http://localhost:3000/api/test | jq .
     
     - name: Cleanup
       if: always()
-      run: docker rm -f test-app 
+      run: |
+        echo "Stopping and removing container..."
+        docker stop test-app || true
+        docker rm test-app || true
+        echo "Container cleanup completed" 
