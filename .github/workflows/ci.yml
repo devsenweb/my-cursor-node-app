@@ -25,26 +25,22 @@ jobs:
     - name: Run tests
       run: npm test
 
-  build:
-    name: Build Docker Image
+  build-and-test:
+    name: Build and Test Docker Image
     needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
     - name: Build Docker image
-      run: docker build -t my-cursor-node-app .
-
-  deploy-test:
-    name: Deploy to Test Environment
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
+      run: docker build -t my-cursor-node-app:test .
     
     - name: Run Docker container
       run: |
-        docker run -d -p 3000:3000 --name test-app my-cursor-node-app
+        docker run -d -p 3000:3000 --name test-app my-cursor-node-app:test
         sleep 10
         curl http://localhost:3000/api/hello
     
